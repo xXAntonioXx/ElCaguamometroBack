@@ -1,8 +1,10 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
+
+const values = require('../logic/values.json')
 
 router.get('/showCaguamaPrice', function (req, res) {
-    res.send('Birds home page');
+    res.send(values.caguamonLight);
 })
 
 module.exports = router
