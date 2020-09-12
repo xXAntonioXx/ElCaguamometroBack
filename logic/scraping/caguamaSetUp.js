@@ -1,8 +1,9 @@
 const cheerio = require("cheerio");
 const request = require("request");
-const values = require("../values.json");
+const beerPrices = require("../beerPrices.json");
+const beerCatalogue = require("../beerCatalogue.json");
 
-let uriOptions = {
+const uriOptions = {
   method: "GET",
   url: "https://www.sixtogo.com.mx/cervezas.html",
 };
@@ -13,19 +14,33 @@ function setCaguamaValues() {
 
     let $ = cheerio.load(body);
 
-    let listItems = $("ol");
-    let liItems = listItems.find("li");
+    let listOfBeersScraped = $("ol").find("li");
 
     let precio = "0.00";
-    liItems.each(function (i, element) {
-      let individualElement = $(element);
-      if (individualElement.text().includes("Tecate Light Caguamón 1.2 L")) {
+  });
+}
+
+function setBeerPrices(listOfBeersScraped){
+
+  let beers = beerCatalogue.beers;
+
+  listOfBeersScraped.each(function (i, element) {
+
+    let individualElement = $(element).text();
+
+    beers.forEach((element) => {
+
+      let beerName = element.beer;
+
+      if(individualElement.text().includes(beerName)){
+
         let detailContainer = individualElement.find("span .price");
-        precio = detailContainer.text();
+        let price = detailContainer.text().replace("$", "");
+        element.price = price;
+
       }
     });
-    let caguamonLightPrice = precio.replace("$", "");
-    values.caguamonLight = caguamonLightPrice;
+    
   });
 }
 

@@ -1,0 +1,9 @@
+{
+    "beers":[
+        {
+            "id":"caguamonLight",
+            "beer":"Tecate Light Caguamón 1.2 L",
+            "price":0
+        }
+    ]
+}
