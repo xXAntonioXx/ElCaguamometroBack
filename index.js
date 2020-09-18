@@ -1,10 +1,10 @@
 const express = require('express')
-const logic = require('./logic/scraping/caguamaSetUp');
+const beerSetUp = require('./logic/scraping/caguamaSetUp');
 const app = express();
 const port = 3000;
 
 //setup
-logic.setCaguamaValues();
+beerSetUp.setBeerData();
 
 //routes
 const CAGUAMAS = require('./routes/routes');

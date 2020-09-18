@@ -1,6 +1,5 @@
 const cheerio = require("cheerio");
 const request = require("request");
-const beerPrices = require("../beerPrices.json");
 const beerCatalogue = require("../beerCatalogue.json");
 
 const uriOptions = {
@@ -8,15 +7,18 @@ const uriOptions = {
   url: "https://www.sixtogo.com.mx/cervezas.html",
 };
 
-function setCaguamaValues() {
-  request(uriOptions, (err, res, body) => {
-    if (err) return console.error(err);
+let $;
 
-    let $ = cheerio.load(body);
-
-    let listOfBeersScraped = $("ol").find("li");
-
-    let precio = "0.00";
+function scrapeCaguamaValues() {
+  return new Promise(resolve => {
+    request(uriOptions, (err, res, body) => {
+      if (err) return console.error(err);
+  
+      $ = cheerio.load(body);
+      let listOfBeersScraped = $("ol").find("li");
+  
+      resolve(listOfBeersScraped);
+    });
   });
 }
 
@@ -26,7 +28,7 @@ function setBeerPrices(listOfBeersScraped){
 
   listOfBeersScraped.each(function (i, element) {
 
-    let individualElement = $(element).text();
+    let individualElement = $(element);
 
     beers.forEach((element) => {
 
@@ -44,6 +46,11 @@ function setBeerPrices(listOfBeersScraped){
   });
 }
 
+async function setBeerData(){
+  let body = await scrapeCaguamaValues();
+  setBeerPrices(body);
+}
+
 module.exports = {
-  setCaguamaValues:setCaguamaValues
+  setBeerData : setBeerData
 }
