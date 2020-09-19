@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const request = require("request");
 const beerCatalogue = require("../beerCatalogue.json");
+const chalk = require("chalk");
 
 const uriOptions = {
   method: "GET",
@@ -10,13 +11,19 @@ const uriOptions = {
 let $;
 
 function scrapeCaguamaValues() {
-  return new Promise(resolve => {
+  console.log(chalk.yellow("Scrapping page..."))
+  return new Promise((resolve,reject) => {
     request(uriOptions, (err, res, body) => {
-      if (err) return console.error(err);
+
+      if (err){
+        console.log(chalk.red("ERROR at scrapping page"))
+        reject(err);
+      }
   
       $ = cheerio.load(body);
       let listOfBeersScraped = $("ol").find("li");
-  
+      console.log(chalk.green("Page Scrapped!"));
+
       resolve(listOfBeersScraped);
     });
   });
@@ -24,6 +31,7 @@ function scrapeCaguamaValues() {
 
 function setBeerPrices(listOfBeersScraped){
 
+  console.log(chalk.yellow("Setting Prices..."))
   let beers = beerCatalogue.beers;
 
   listOfBeersScraped.each(function (i, element) {
@@ -34,16 +42,18 @@ function setBeerPrices(listOfBeersScraped){
 
       let beerName = element.beer;
 
-      if(individualElement.text().includes(beerName)){
+      if(individualElement.text().includes(beerName) && element.price <= 0){
 
         let detailContainer = individualElement.find("span .price");
         let price = detailContainer.text().replace("$", "");
         element.price = price;
+        console.log(chalk.magenta(`${beerName} Ready`));
 
       }
     });
     
   });
+  console.log(chalk.green("Beer Prices Ready!"))
 }
 
 async function setBeerData(){
