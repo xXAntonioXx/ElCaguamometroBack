@@ -45,8 +45,16 @@ function setBeerPrices(listOfBeersScraped){
       if(individualElement.text().includes(beerName) && element.price <= 0){
 
         let detailContainer = individualElement.find("span .price");
+        let otherDetails = individualElement.find("div .additional-attributes-item").text()
+        let cointainer = getBeerContainer(otherDetails);
+        element.container = cointainer;
+
         let price = detailContainer.text().replace("$", "");
         element.price = price;
+
+        let image = individualElement.find("img").attr("src");
+        element.image = image;
+
         console.log(chalk.magenta(`${beerName} Ready`));
 
       }
@@ -54,6 +62,12 @@ function setBeerPrices(listOfBeersScraped){
     
   });
   console.log(chalk.green("Beer Prices Ready!"))
+}
+
+function getBeerContainer(beerAttributes){
+  let beerAttributesArray = beerAttributes.split(/\n/);
+  let beerContainer = beerAttributesArray[2].replace(/\s*/,"").replace(/\s*$/,"");
+  return beerContainer;
 }
 
 async function setBeerData(){

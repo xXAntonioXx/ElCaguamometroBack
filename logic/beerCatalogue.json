@@ -3,7 +3,23 @@
         {
             "id":"caguamonLight",
             "beer":"Tecate Light Caguamón 1.2 L",
-            "price":0
+            "price":0,
+            "container":"Caguamón",
+            "image":""
+        },
+        {
+            "id":"lataTecateRoja",
+            "beer":"Tecate Original Lata 355 ml",
+            "price":0,
+            "container":"Lata",
+            "image":""
+        },
+        {
+            "id":"botellaHeineken",
+            "beer":"Heineken Botella 355 ml",
+            "price":0,
+            "container":"botella",
+            "image":""
         }
     ]
 }
