@@ -17,6 +17,20 @@ function authenticateJWT(req,res,next){
     }
 }
 
+function verifyToken(req){
+    const authHeader = req.headers.authorization;
+    if(authHeader){
+        const token = authHeader.split(' ')[1];
+        const secret = process.env.SECRET;
+        const payloadJwt = jwt.verify(token,secret);
+        if(payloadJwt){
+            return true;
+        }
+    }
+    return false
+}
+
 module.exports = {
-    authenticateJWT : authenticateJWT
+    authenticateJWT : authenticateJWT,
+    verifyToken : verifyToken
 }

@@ -4,6 +4,7 @@ const beerSetUp = require('./logic/scraping/caguamaSetUp');
 const chalk = require("chalk");
 const dbConfig = require('./database/dbConfig');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
@@ -24,6 +25,7 @@ async function start(){
   const AUTH = require('./routes/login');
   
   app.use(bodyParser.json());
+  app.use(cors());
   app.use('/Caguamas',CAGUAMAS)
   app.use('/Auth',AUTH);
   app.get('/', (req, res) => {

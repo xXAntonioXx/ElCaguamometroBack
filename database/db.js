@@ -23,11 +23,26 @@ class dbCrud {
     
     async loadModel(modelName, modelSchema){
         try{
-            return this.connection.model(modelName, modelSchema);
+            this.connection.model(modelName, modelSchema);
+            //return this.connection.model(modelName, modelSchema);
         }catch(Ex){
             console.log("Error on compiling a model");
-            return null;
+            //return null;
         }
+    }
+
+    insert(modelName,modelBody){
+        return new Promise((resolve,reject)=>{
+            const model = this.connection.model(modelName);
+            const modelInstance = new model(modelBody);
+            modelInstance.save((err,modelRetrived)=>{
+                if(err){
+                    console.log(`error at inserting a new "${modelName}"`);
+                    reject(false);
+                }
+                resolve(true);
+            });
+        });
     }
 
     closeMongooseConnection(){
