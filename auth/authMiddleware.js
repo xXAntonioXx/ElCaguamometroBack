@@ -22,12 +22,16 @@ function verifyToken(req){
     if(authHeader){
         const token = authHeader.split(' ')[1];
         const secret = process.env.SECRET;
-        const payloadJwt = jwt.verify(token,secret);
-        if(payloadJwt){
-            return true;
+        try{
+            const payloadJwt = jwt.verify(token,secret);
+            if(payloadJwt){
+                return true;
+            }
+        }catch(e){
+            return false;
         }
     }
-    return false
+    return false;
 }
 
 module.exports = {
